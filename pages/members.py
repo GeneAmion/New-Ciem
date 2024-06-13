@@ -51,7 +51,7 @@ layout = html.Div([
                     ),
                 ], class_name='flex '),
 
-                dbc.Container(["No Members to Display"], id="mem-table", class_name='table-wrapper')
+                dbc.Container(id="mem-table", class_name='table-wrapper')
             ],
             class_name="custom-card"
         )
@@ -69,6 +69,7 @@ def mem_pop(pathname, alum_name, filter_select, prof_filter):
     if pathname == "/members":
         sql = """ 
             SELECT 
+                upciem_member.upciem_member_id,
                 CONCAT(first_name, ' ', middle_name, ' ', last_name, ' ', suffix) AS full_name,
                 birthdate,
                 membership_type,
@@ -95,29 +96,27 @@ def mem_pop(pathname, alum_name, filter_select, prof_filter):
             else:
                 sql += f" AND {filter_select} ILIKE %s"
                 values.append(f"%{prof_filter}%")
-        print(sql,alum_name)
-        cols = ["Name", "Birthday", "Membership", "App Batch", "Year Standing", "Degree Program", "Other Orgs", "Email", "Present Address"]
+        
+        cols = ["ID", "Name", "Birthday", "Membership", "App Batch", "Year Standing", "Degree Program", "Other Orgs", "Email", "Present Address"]
         df = db.querydatafromdatabase(sql, values, cols)
-
-        if not df.empty:
+        
+        if df.shape[0] > 0:  # Check if DataFrame has rows
+            df['Action'] = [f'<a href="/add_alumni?mode=edit&id={id}" ><Button class="lbtn">Edit</Button></a>' for id in df['ID']]
             table = dash_table.DataTable(
-                data=df.to_dict('records'),
-                columns=[{'name': i, 'id': i} for i in df.columns],
+                data=df.to_dict('records'),  # Convert DataFrame to list of dictionaries
+                columns=[{'name': i, 'id': i, 'presentation': 'markdown'} if i == 'Action' else {'name': i, 'id': i} for i in df.columns],  # Specify column names and IDs
+                markdown_options={'html': True},
                 style_cell={
-                    'text-align': 'center',
-                    'font-family': 'Arial, sans-serif',
-                    'font-size': '14px',
-                    'color': '#000000',
-                    'height': '40px',
+                    "height": "50px",
+                    'text-align': 'left',
+                    "background-color": "#EEF2FA",
+                    "color": "#273250",
                 },
                 style_header={
-                    'background-color': '#f8f9fa',  # Light grey background for header
-                    'color': '#000000',
-                    'text-align': 'center',
-                    'font-family': 'Arial, sans-serif',
-                    'font-size': '16px',
-                    'font-weight': 'bold',
-                    'border-bottom': '2px solid #dee2e6',  # Border for separation
+                    "background-color": "#000097",
+                    "color": "#FFF",
+                    "text-align": "center",
+                    "border-bottom": "4px solid white",
                 },
                 style_data_conditional=[
                     {
@@ -131,8 +130,10 @@ def mem_pop(pathname, alum_name, filter_select, prof_filter):
                 ],
                 page_action='native',
                 page_size=10,
-                style_table={'height': '80%', 'overflow': 'hidden'}
+                style_table={"height": "80%", 'overflow': 'hidden'}
             )
             return [table]
+        
         return ["No Members to Display"]
+    
     raise PreventUpdate
