@@ -11,6 +11,19 @@ from dash.exceptions import PreventUpdate
 layout = html.Div(
     [
         dcc.Store(id='account_id_store', storage_type='session', data=0),  # Store user ID
+        html.Video(
+            src='/assets/login_bg.mp4',
+            autoPlay=True,
+            loop=True,
+            muted=True,
+            style={
+                'position': 'fixed',
+                'width': '100%',
+                'height': '100%',
+                'object-fit': 'cover',
+                'z-index': '-1',
+            }
+        ),
         html.Div(
             [
                 html.Img(
@@ -69,26 +82,23 @@ layout = html.Div(
                         'position': 'fixed',
                         'left': '8rem',  # Position the card to the left of the screen
                         'top': '16rem',  # Position the card below the title image
-                        'padding': '2rem',
+                        'padding': '3rem',
                         'border-radius': '20px',
                         'box-shadow': '0px 0px 10px rgba(0, 0, 0, 0.2)',
-                        'background-color': 'rgba(255, 255, 255, 0.4)',  # 50% transparent background color
+                        'background-color': 'rgba(255, 255, 255, 0.3)',  # 50% transparent background color
                     }
                 ),
             ],
         ),
     ],
-    id='bg',
     style={
         'position': 'fixed',
         'width': '100%',
         'height': '100%',
-        'background-image': 'url("/assets/login_bg.png")',
-        'background-size': 'cover',
-        'background-position': 'center',
-        'background-repeat': 'no-repeat',
+        'overflow': 'hidden',  # Ensure the content does not overflow the background
     }
 )
+
 
 @app.callback(
     [
