@@ -7,45 +7,88 @@ from app import app
 from apps import dbconnect as db
 from dash.exceptions import PreventUpdate
 
+
 layout = html.Div(
     [
         dcc.Store(id='account_id_store', storage_type='session', data=0),  # Store user ID
-        dbc.Card(
-            dbc.CardBody(
-                [
-                    dbc.CardHeader(html.H1("LOG IN")),
-                    html.Br(),
+        html.Div(
+            [
+                html.Img(
+                    src='/assets/login_title.png',
+                    style={
+                        'max-width': '28vw',
+                        'display': 'block',
+                    },
+                ),
+            ],
+            style={
+                'position': 'fixed',
+                'left': '8rem',  # Position the title image to the left of the screen
+                'top': '8rem',  # Position the title image above the login card
+                'z-index': '1',
+            }
+        ),
+        html.Div(
+            [
+                dbc.Card(
+                    dbc.CardBody(
+                        [
+                            html.H2("LOG IN", className="card-title fw-bolder"),
+                            html.Br(),
 
-                    dbc.Alert(id='login_alert', is_open=False),
-                    dbc.Input(id='uname', type='text', className='input', placeholder='Username'),
-                    html.Br(),
+                            dbc.Alert(id='login_alert', is_open=False),
+                            dbc.Input(id='uname', type='text', className='input', placeholder='Username'),
+                            html.Br(),
 
-                    dbc.Input(type='password', id='pword', className='input', placeholder='Password'),
-                    html.Br(),
+                            dbc.Input(type='password', id='pword', className='input', placeholder='Password'),
+                            html.Br(),
 
-                    dbc.Checklist(
-                        options=[{"label": "Show Password", "value": 1}],
-                        value=[],
-                        id="show_pword",
-                        inline=True,
+                            dbc.Checklist(
+                                options=[{"label": "Show Password", "value": 1}],
+                                value=[],
+                                id="show_pword",
+                                inline=True,
+                            ),
+                            html.Br(),
+                            dbc.Row(
+                                dbc.Col(
+                                    dbc.Button("Log in", color="primary", className="loginbutton", id='login_loginbtn'),
+                                    width={'size': 4, 'offset': 8},
+                                    className="d-flex justify-content-end"
+                                )
+                            ),
+                        ],
+                        className='half left',
+                        style={
+                            'background-color': 'rgba(255, 255, 255, 0.0)',  # 50% transparent background color
+                        }
                     ),
-                    html.Br(),
-                    dbc.Row(
-                        dbc.Col(
-                            dbc.Button("Log in", color="primary", className="loginbutton", id='login_loginbtn'),
-                            width={'size': 4, 'offset': 8},
-                            className="d-flex justify-content-end"
-                        )
-                    ),
-                ],
-                className='half left'
-            ),
-            class_name='flex small'
+                    className='flex small',
+                    style={
+                        'width': '35%',
+                        'position': 'fixed',
+                        'left': '8rem',  # Position the card to the left of the screen
+                        'top': '16rem',  # Position the card below the title image
+                        'padding': '2rem',
+                        'border-radius': '20px',
+                        'box-shadow': '0px 0px 10px rgba(0, 0, 0, 0.2)',
+                        'background-color': 'rgba(255, 255, 255, 0.4)',  # 50% transparent background color
+                    }
+                ),
+            ],
         ),
     ],
-    className='FullScreen'
+    id='bg',
+    style={
+        'position': 'fixed',
+        'width': '100%',
+        'height': '100%',
+        'background-image': 'url("/assets/login_bg.png")',
+        'background-size': 'cover',
+        'background-position': 'center',
+        'background-repeat': 'no-repeat',
+    }
 )
-
 
 @app.callback(
     [
