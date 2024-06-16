@@ -263,7 +263,7 @@ layout = html.Div([
     html.Div([
         html.Div([
         dbc.Card([
-            dbc.CardHeader("REAFFILIATION FORM", className='flex'),
+            dbc.CardHeader("ADD ALUMNI FORM", className='flex'),
             dbc.CardBody([
                 dbc.Container(
                     [
