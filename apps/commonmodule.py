@@ -58,7 +58,7 @@ navigation=dbc.Nav(
         
        ],style={'padding':'0'}),
        dbc.Container([
-           dbc.NavItem(dbc.NavLink([html.Img(src='/assets/icons8-writer-male-96.png',className='icon'),dbc.Label("Show Profile",style={'padding-left':'1.3em'})], id='link-profile',active=True, href="/profile?mode=view",class_name='linked'),class_name='nav-item-custom'),
+           dbc.NavItem(dbc.NavLink([html.Img(src='/assets/icons8-help-64.png',className='icon'),dbc.Label("Help",style={'padding-left':'1.3em'})], id='link-help',active=True, href="/help",class_name='linked'),class_name='nav-item-custom'),
             dbc.NavItem(dbc.NavLink([html.Img(src='/assets/icons8-password-key-96.png',className='icon'),dbc.Label("Change Password",style={'padding-left':'1.3em'})], id='link-password',active=True, href="/change-password",class_name='linked'),class_name='nav-item-custom'),
             dbc.NavItem(dbc.NavLink([html.Img(src='/assets/icons8-logout-96.png',className='icon'),dbc.Label("Logout",style={'padding-left':'1.3em'})], id='link-out',active=True, href="/logout",class_name='linked'),class_name='nav-item-custom'),
             
@@ -76,7 +76,7 @@ navigation=dbc.Nav(
         #Output('link-update-member','class_name'),
         #Output('link-update-alum','class_name'),
         Output('link-reports','class_name'),
-        Output('link-profile','class_name'),
+        Output('link-help','class_name'),
         Output('link-password','class_name'),
 
     ],

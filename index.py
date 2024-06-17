@@ -3,7 +3,7 @@ import dash_bootstrap_components as dbc
 from dash import dcc, html
 from dash.dependencies import Input, Output, State
 from app import app
-from pages import home, login, changepassword, generatereport, managers, members, reaffiliate, updatealum, updatemember, alumni, updatemem, add_alumni
+from pages import home, login, changepassword, generatereport, managers, members, reaffiliate, updatealum, updatemember, alumni, updatemem, add_alumni, help_me
 
 
 app.layout = html.Div([
@@ -44,6 +44,11 @@ def display_page(pathname, auth_data):
             return add_alumni.layout, '/add_alumni'
         elif pathname == '/add_alumni':
             return add_alumni.layout, '/add_alumni'
+        elif pathname == "/change-password":
+            return changepassword.layout, "/change-password"
+        elif pathname == "/help":
+            return help_me.layout, "/help"
+        
         else:
             return 'error404', '/error404'
     else:
