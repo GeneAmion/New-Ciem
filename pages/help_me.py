@@ -17,10 +17,12 @@ layout=html.Div([
                 dbc.CardHeader("Access the User Manual at this link:", class_name='flex'),
                 dbc.CardBody([
                     dbc.Container([
-                        dbc.Row(html.A("BLUEPRINT USER MANUAL", href="https://docs.google.com/document/d/18yn3-3cCLMZqjCliEXs9IFPj6c0PGOHTNOq8U-1BgRo/edit?usp=sharing", target="blank"), style={'font-size':"2em"}),
+                        dbc.Row(html.A("BLUEPRINT USER MANUAL", href="https://docs.google.com/document/d/18yn3-3cCLMZqjCliEXs9IFPj6c0PGOHTNOq8U-1BgRo/edit?usp=sharing", target="blank"), style={'font-size':"3em"}),
+                
                 ], class_name='flex homeshow')
-                ])
+                
             ]),
+            html.Img(src='/assets/manual_page.png'),]),
             dbc.CardFooter(
             [
                         dbc.Row(dbc.Label("For any concerns, please contact the developers at:")),
