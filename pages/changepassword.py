@@ -26,14 +26,6 @@ modal=html.Div([
     ],className='hidden modal',id='cp-main')
 ])
 
-head_style = {
-    "font-family": "Arial",
-    "color": "#273250",
-        }
-
-pass_style = {
-   "color": "#F8B237"
-}
 
 newpass_form = dbc.Form(
     [
@@ -103,6 +95,7 @@ Input('url', 'pathname'),
     State('auth','data')
 ]
 )
+
 def update_pass(pathname,data):
     if pathname=="/change-password":
         sql="SELECT account_password FROM user_account WHERE user_name=""'"+data['acc']+"'"
