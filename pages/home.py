@@ -111,10 +111,12 @@ layout=html.Div([
         Output('total-mem-home','children'),
         Output('total-alum-home','children'),
         Output('home-user','children'),
+        Output('session-user','children')
     ],
-    Input('url','pathname')
+    Input('url','pathname'),
+    State('auth','data')
 )
-def total(pathname):
+def total(pathname,data):
     #childrens to be called back
     memchildren=[]
     alumchildren=[]
@@ -137,5 +139,5 @@ def total(pathname):
         cols=['act','inact']
         df=db.querydatafromdatabase(sql,[],cols)
         profchildren+=[html.H3(['Active: ',df['act'][0]]),html.H3(['Inactive: ',df['inact'][0]])]
-        return memchildren,alumchildren,profchildren
+        return memchildren,alumchildren,profchildren,data['acc']
     raise PreventUpdate

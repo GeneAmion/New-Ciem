@@ -98,14 +98,25 @@ layout = html.Div(
         'overflow': 'hidden',  # Ensure the content does not overflow the background
     }
 )
-
-
+@app.callback(
+        [Output('auth','data',allow_duplicate=True),Output('url','pathname',allow_duplicate=True)],
+        Input('url','pathname'),
+    prevent_initial_call=True
+)
+def logout(pn):
+    if pn=='/logout':
+        ndata={}
+        ndata['isAuthenticated']=False
+        return ndata,'/login'
+    print('---')
+    raise PreventUpdate
 @app.callback(
     [
         Output('login_alert', 'color'),
         Output('login_alert', 'children'),
         Output('login_alert', 'is_open'),
-        Output('auth', 'data'),  # Update auth data upon successful login
+        Output('auth', 'data'),  # Update auth data upon successful login,
+        Output('url','pathname')
     ],
     [
         Input('login_loginbtn', 'n_clicks'), 
@@ -113,10 +124,10 @@ layout = html.Div(
     [
         State('uname', 'value'),
         State('pword', 'value'), 
-        State('auth', 'data'),  # Retrieve auth data
-    ]
+    ],
 )
-def loginprocess(loginbtn, username, password, auth_data):    
+def loginprocess(loginbtn, username, password):  
+    auth_data={}  
     ctx = callback_context
     if ctx.triggered:
         alert_open = False 
@@ -124,10 +135,11 @@ def loginprocess(loginbtn, username, password, auth_data):
         alert_text = ""
 
         eventid = ctx.triggered[0]['prop_id'].split('.')[0] 
-        
+        print(loginbtn)
         if eventid == 'login_loginbtn':
+
+            pn='/login'
             if loginbtn and username and password:
-                
                 sql = """
                 SELECT  account_password
                 FROM user_account
@@ -142,15 +154,18 @@ def loginprocess(loginbtn, username, password, auth_data):
                 df = db.querydatafromdatabase(sql, values, cols)
                 if df.shape[0]:
                     auth_data['isAuthenticated'] = True  # Set isAuthenticated to True upon successful login
+                    auth_data['acc']=username
                     alert_color = 'success'
                     alert_text = 'Successfully logged in.'
                     alert_open = True
+                    pn='/home'
                 else:
                     alert_color = 'danger'
                     alert_text = 'Incorrect username or password.'
                     alert_open = True
+                    pn="/login"
             
-        return [alert_color, alert_text, alert_open, auth_data]
+        return [alert_color, alert_text, alert_open, auth_data,pn]
     else:
         raise PreventUpdate
 
