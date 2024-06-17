@@ -310,7 +310,7 @@ def submit_form(n_clicks,pathname,search, alumfirst_name, alummiddle_name, aluml
                 emergency_alumcontact_number, alumemail, alumpresent_address, alumpermanent_address, specialization, remarks):
     
     if n_clicks is None:
-        if pathname.startswith('/add_alum'):
+        if pathname.startswith('/add_alum') and len(search)>4:
             parsed = urllib.parse.urlparse(search)
             parsed_dict = urllib.parse.parse_qs(parsed.query)
             print(parsed_dict)
@@ -324,7 +324,7 @@ def submit_form(n_clicks,pathname,search, alumfirst_name, alummiddle_name, aluml
             raise PreventUpdate
 
     if not (alumfirst_name and alumlast_name and alumvalid_id and alumbirthdate and alumcontact_number and emergency_alumcontact_number and alumemail and alumpresent_address and alumpermanent_address and specialization ):
-        return html.Div("Please fill in all required fields.", style={'color': 'red'})
+        return html.Div("Please fill in all required fields.", style={'color': 'red'}),dash.no_update,dash.no_update,dash.no_update,dash.no_update,dash.no_update,dash.no_update,dash.no_update,dash.no_update,dash.no_update,dash.no_update,dash.no_update
 
     try:
         # Check if the person already exists
@@ -357,19 +357,18 @@ def submit_form(n_clicks,pathname,search, alumfirst_name, alummiddle_name, aluml
             values = [alumfirst_name, alummiddle_name, alumlast_name, alumsuffix, alumbirthdate, alumcontact_number, emergency_alumcontact_number, alumemail, alumpresent_address, alumpermanent_address]
             sql+=" WHERE valid_id='{alumvalid_id}';"
             db.modifydatabase(sql, values)
-            
+            sql='UPDATE upciem_member SET upciem_member_delete=True WHERE valid_id=%s'
+            values=[alumvalid_id]
+            db.modifydatabase(sql,values)
             # Update SPECIALIZATION information
             sql = """
-                UPDATE alumni 
-                SET 
-                    specialization=%s
-                    
-                WHERE valid_id=%s
+                INSERT INTO alumni(specialization,valid_id) 
+                VALUES(%s,%s)
             """
-            values = [specialization,alumvalid_id]
+            values = [','.join(specialization),alumvalid_id]
             db.modifydatabase(sql, values)
             
-            message = "Existing member information updated successfully."
+            message = "Existing upciem member information updated successfully-moved to alumni."
         else:
             # Insert new person
             sql = """
@@ -384,7 +383,7 @@ def submit_form(n_clicks,pathname,search, alumfirst_name, alummiddle_name, aluml
             #Adding to upciem_member
             message = "New alumni successfully added."
 
-        return html.Div(message, style={'color': 'green'})
+        return html.Div(message, style={'color': 'green'}),'','','','','','','','','','',''
 
     except Exception as e:
         return html.Div(f"An error occurred: {str(e)}", style={'color': 'red'})
