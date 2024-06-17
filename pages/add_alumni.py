@@ -8,7 +8,7 @@ from app import app
 from apps import commonmodule as cm
 from apps import dbconnect as db
 from dash_iconify import DashIconify as di
-
+import urllib.parse
 
 # Define the form layout
 
@@ -277,8 +277,20 @@ layout = html.Div([
         ])
 
 @app.callback(
-    Output('alumoutput-message', 'children'),
-    [Input('alumsubmit-button', 'n_clicks')],
+    [Output('alumoutput-message', 'children'),
+     Output('alumfirst_name', 'value'),
+     Output('alummiddle_name', 'value'),
+     Output('alumlast_name', 'value'),
+     Output('alumsuffix', 'value'),
+     Output('alumvalid_id', 'value'),
+     Output('alumbirthdate', 'value'),
+     Output('alumcontact_number', 'value'),  # Fixing the ID here
+     Output('emergency_alumcontact_number', 'value'),
+     Output('alumemail', 'value'),
+     Output('alumpresent_address', 'value'),
+     Output('alumpermanent_address', 'value'),
+     ],
+    [Input('alumsubmit-button', 'n_clicks'),Input('url','pathname'),Input('url','search')],
     [State('alumfirst_name', 'value'),
      State('alummiddle_name', 'value'),
      State('alumlast_name', 'value'),
@@ -290,14 +302,26 @@ layout = html.Div([
      State('alumemail', 'value'),
      State('alumpresent_address', 'value'),
      State('alumpermanent_address', 'value'),
-     State('specialization', 'value'),
+     State('specialization-dropdown', 'value'),
      State('remarks', 'value')
      ]
 )
-def submit_form(n_clicks, alumfirst_name, alummiddle_name, alumlast_name, alumsuffix, alumvalid_id, alumbirthdate, alumcontact_number,
+def submit_form(n_clicks,pathname,search, alumfirst_name, alummiddle_name, alumlast_name, alumsuffix, alumvalid_id, alumbirthdate, alumcontact_number,
                 emergency_alumcontact_number, alumemail, alumpresent_address, alumpermanent_address, specialization, remarks):
+    
     if n_clicks is None:
-        raise PreventUpdate
+        if pathname.startswith('/add_alum'):
+            parsed = urllib.parse.urlparse(search)
+            parsed_dict = urllib.parse.parse_qs(parsed.query)
+            print(parsed_dict)
+            sql="SELECT * FROM person WHERE valid_id=%s"
+            values=[parsed_dict['id'][0]]
+            columns=['id','fname','mname','lname','sfx','bday','cn','ecn','email','pra','pea','acctid','persondel']
+            df=db.querydatafromdatabase(sql,values,columns)
+            #always assume meron
+            return dash.no_update, df['fname'][0],df['mname'][0],df['lname'][0],df['sfx'][0],parsed_dict['id'][0],df['bday'][0],df['cn'][0],df['ecn'][0],df['email'][0],df['pra'][0],df['pea'][0]
+        else:
+            raise PreventUpdate
 
     if not (alumfirst_name and alumlast_name and alumvalid_id and alumbirthdate and alumcontact_number and emergency_alumcontact_number and alumemail and alumpresent_address and alumpermanent_address and specialization ):
         return html.Div("Please fill in all required fields.", style={'color': 'red'})

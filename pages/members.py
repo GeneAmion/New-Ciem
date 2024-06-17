@@ -2,7 +2,7 @@ import dash
 from dash import dcc, html, Input, Output, State
 import dash_bootstrap_components as dbc
 from dash.exceptions import PreventUpdate
-import dash_table
+from dash import dash_table
 from app import app
 from apps import commonmodule as cm
 from apps import dbconnect as db
@@ -67,7 +67,7 @@ def mem_pop(pathname, alum_name, filter_select, prof_filter):
     if pathname == "/members":
         sql = """ 
             SELECT 
-                upciem_member_id,
+                person.valid_id,
                 CONCAT(first_name, ' ', middle_name, ' ', last_name, ' ', suffix) AS full_name,
                 birthdate,
                 membership_type,
@@ -99,7 +99,7 @@ def mem_pop(pathname, alum_name, filter_select, prof_filter):
         df = db.querydatafromdatabase(sql, values, cols)
 
         if not df.empty:
-            df['ID'] = df['ID'].apply(lambda x: f'<a href="/add_alumni?mode=edit&id={x}"><button class="btn btn-primary btn-sm">Move to Alumni</button></a>')
+            df['ID'] = df['ID'].apply(lambda x: f'<a href="/add_alumni?mode=toalum&id={x}"><button class="btn btn-primary btn-sm">Move to Alumni</button></a>')
             table = dash_table.DataTable(
                 data=df.to_dict('records'),
                 columns=[{'name': i, 'id': i, 'presentation': 'markdown'} if i == 'ID' else {'name': i, 'id': i} for i in df.columns],
