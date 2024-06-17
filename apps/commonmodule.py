@@ -47,7 +47,7 @@ def page_name(pathname):
 navigation=dbc.Nav(
     [
        dbc.Container([
-           dbc.NavbarBrand([html.Img(src='/assets/logo.png',style={"width":"2.8dvw",'display':'inline'}),dbc.Label("UP Circle of Industrial Engineering Majors",style={'padding-left':'0.5em','font-size':'0.6em'})], style={"display":"block","width":"100%",'color':'white'}),
+           dbc.NavbarBrand([html.Img(src='/assets/logo.png',style={"width":"2.8dvw",'display':'inline'}),dbc.Label("UP CIEM: BLUEPRINT",style={'padding-left':'0.5em','font-size':'0.8em'})], style={"display":"block","width":"100%",'color':'white'}),
             dbc.NavItem(dbc.NavLink([html.Img(src='/assets/icons8-home-96.png',className='icon'),dbc.Label("Home",style={'padding-left':'1.3em'})], id='link-home',active=True, href="/home",class_name='linked'),class_name='nav-item-custom'),
             dbc.NavItem(dbc.NavLink([html.Img(src='/assets/icons8-writer-male-96.png',className='icon'),dbc.Label("Reaffiliation",style={'padding-left':'1.3em'})], id='link-reaff',active=True, href="/reaffiliate",class_name='linked'),class_name='nav-item-custom'),
             dbc.NavItem(dbc.NavLink([html.Img(src='/assets/icons8-people-96.png',className='icon'),dbc.Label("Members",style={'padding-left':'1.3em'})],id='link-member', active=True, href="/members",class_name='linked'),class_name='nav-item-custom'),
